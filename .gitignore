@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.tox/
+
+# IDE-specific files
+.idea/
+.vscode/
+*.iml
+*.pydevproject
+
+# Local settings
+instance/
+
+#grib2 data 
+*.grib2
+
+HRRRdata/
+HRRRImages/

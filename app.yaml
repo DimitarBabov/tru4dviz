@@ -1,0 +1,11 @@
+runtime: python312 # Or python38, depending on your app's Python version
+
+entrypoint: gunicorn -b :$PORT app:app
+
+# Optional, but helpful settings:
+handlers:
+  - url: /.*
+    script: auto
+
+# This sets the instance class to F1 (the smallest size for a free-tier app)
+instance_class: F1
