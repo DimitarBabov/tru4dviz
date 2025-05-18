@@ -1,9 +1,0 @@
-Parameter: VGRD
-Level: 500_mb
-Latitude bounds: 20.0 to 55.0
-Longitude bounds: 230.0 to 300.0
-Source GRIB file: gfs_data/VGRD_500_mb_gfs.20241009_06_f048.grb2
-Min value: -24.5840576171875
-Max value: 22.915942382812503
-Global Min: -44.522666015625
-Global Max: 43.0216845703125

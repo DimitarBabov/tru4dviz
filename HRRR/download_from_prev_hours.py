@@ -1,3 +1,5 @@
+# WILL CHANGE this is to facilitate automated downloading of data from the previous hours
+
 import os
 import shutil  # To move the downloaded file
 from datetime import datetime, timedelta

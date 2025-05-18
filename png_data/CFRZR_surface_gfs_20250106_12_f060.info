@@ -1,9 +1,0 @@
-Parameter: CFRZR
-Level: surface
-Latitude bounds: -90.0 to 90.0
-Longitude bounds: 0.0 to 360.0
-Source GRIB file: gfs_data/CFRZR_surface_gfs.20250106_12_f060.grb2
-Min value: 0.0
-Max value: 1.0
-Global Min: 0.0
-Global Max: 1.0
