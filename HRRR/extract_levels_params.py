@@ -181,7 +181,7 @@ with open(summary_csv_path, "w") as f:
     f.write(f"{num_points_per_level},{num_levels}\n")
     f.write(f"total_points\n")
     f.write(f"{total_points}\n")
-print(f"Fort Worth grid summary saved to {summary_csv_path}")
+print(f"Fort Worth grid summary saved to {summary_csv_path}") 
 
 # --- NEW: Save Unity-ready CSV for levels 1 to 15 with normalized values ---
 levels_1_to_15 = [level for level in valid_levels if 1 <= level <= 15]

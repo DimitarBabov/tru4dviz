@@ -11,7 +11,16 @@ public class WindVectorMeshLoader : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(GenerateMeshFromContainer());
+        StartCoroutine(WaitForDataAndGenerateMesh());
+    }
+
+    IEnumerator WaitForDataAndGenerateMesh()
+    {
+        while (dataContainer == null || !dataContainer.IsLoaded)
+        {
+            yield return null;
+        }
+        yield return StartCoroutine(GenerateMeshFromContainer());
     }
 
     IEnumerator GenerateMeshFromContainer()
