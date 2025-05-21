@@ -6,9 +6,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.mplot3d import Axes3D
+import os
+from PIL import Image
 
-def get_elevation_data(bbox):
-    """Get elevation data for a bounding box using USGS 3DEP API."""
+def get_elevation_data(bbox, filename='fort_worth_elevation.npy'):
+    """Get elevation data for a bounding box using USGS 3DEP API, or load from file if exists."""
+    if os.path.exists(filename):
+        print(f"Loading elevation data from {filename}...")
+        return np.load(filename)
     # USGS 3DEP API endpoint
     url = "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage"
     
@@ -33,6 +38,7 @@ def get_elevation_data(bbox):
         with BytesIO(response.content) as f:
             with rasterio.open(f) as src:
                 elevation = src.read(1)
+                np.save(filename, elevation)
                 return elevation
     except Exception as e:
         print(f"Error downloading elevation data: {e}")
@@ -43,10 +49,8 @@ def plot_elevation(elevation_data, bbox):
     # Create figure with two subplots
     fig = plt.figure(figsize=(15, 6))
     
-    # Create custom colormap for elevation
-    colors = ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', 
-              '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
-    cmap = LinearSegmentedColormap.from_list('elevation_cmap', colors)
+    # Create grayscale colormap for elevation
+    cmap = 'gray'
     
     # Plot elevation map
     ax1 = fig.add_subplot(121)
@@ -129,5 +133,14 @@ if elevation_data is not None:
     df = pd.DataFrame(elevation_data)
     df.to_csv('fort_worth_elevation.csv', index=True, header=True)
     print("Data saved to 'fort_worth_elevation.csv'")
+
+    # Save grayscale height map for Unity
+    elev_min = np.nanmin(elevation_data)
+    elev_max = np.nanmax(elevation_data)
+    norm_elev = (elevation_data - elev_min) / (elev_max - elev_min)
+    img_array = (norm_elev * 255).astype(np.uint8)
+    img = Image.fromarray(img_array)
+    img.save('fort_worth_heightmap.png')
+    print("Grayscale height map saved to 'fort_worth_heightmap.png'")
 else:
     print("Failed to download elevation data") 
