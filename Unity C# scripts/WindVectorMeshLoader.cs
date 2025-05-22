@@ -7,7 +7,9 @@ public class WindVectorMeshLoader : MonoBehaviour
     public Material windMaterial;
     public float arrowBaseSize = 0.005f;
     public float arrowLength = 0.05f;
-    public HrrrDataContainer dataContainer;
+    public DataContainer dataContainer;
+    public float arrowScale = 1.0f;
+    public bool uniformArrowLength = false;
 
     void Start()
     {
@@ -27,13 +29,13 @@ public class WindVectorMeshLoader : MonoBehaviour
     {
         if (dataContainer == null || dataContainer.lat.Count == 0)
         {
-            Debug.LogError("No data in HrrrDataContainer!");
+            Debug.LogError("No data in DataContainer!");
             yield break;
         }
 
         // Arrow mesh template (local space, tip along +Z)
-        float baseSize = arrowBaseSize;
-        float length = arrowLength;
+        float baseSize = arrowBaseSize * arrowScale;
+        float length = arrowLength * arrowScale;
         Vector3[] arrowVerts = new Vector3[]
         {
             new Vector3(-baseSize, 0, 0),
@@ -51,16 +53,16 @@ public class WindVectorMeshLoader : MonoBehaviour
         };
 
         // Find min/max/mean for centering
-        float minGh = float.MaxValue, maxGh = float.MinValue;
+        float minMsl = float.MaxValue, maxMsl = float.MinValue;
         float minLon = float.MaxValue, maxLon = float.MinValue;
         float minLat = float.MaxValue, maxLat = float.MinValue;
         for (int i = 0; i < dataContainer.lat.Count; i++)
         {
             float lon = dataContainer.lon[i];
             float lat = dataContainer.lat[i];
-            float gh = dataContainer.gh[i];
-            if (gh < minGh) minGh = gh;
-            if (gh > maxGh) maxGh = gh;
+            float msl = dataContainer.msl[i];
+            if (msl < minMsl) minMsl = msl;
+            if (msl > maxMsl) maxMsl = msl;
             if (lon < minLon) minLon = lon;
             if (lon > maxLon) maxLon = lon;
             if (lat < minLat) minLat = lat;
@@ -80,17 +82,17 @@ public class WindVectorMeshLoader : MonoBehaviour
         {
             float lat = dataContainer.lat[i];
             float lon = dataContainer.lon[i];
-            float gh = dataContainer.gh[i];
+            float msl = dataContainer.msl[i];
             float uNorm = dataContainer.u_norm[i];
             float vNorm = dataContainer.v_norm[i];
             float wNorm = dataContainer.w_norm[i];
             float mag = dataContainer.mag[i];
-            float magNorm = dataContainer.mag_norm[i];
+            float magNorm = uniformArrowLength ? 1f : dataContainer.mag_norm[i];
 
-            // Convert lat/lon/gh to Unity world coordinates (customize as needed)
+            // Convert lat/lon/msl to Unity world coordinates (customize as needed)
             Vector3 pos = new Vector3(
                 lon - centerLon,
-                (gh - minGh) * 0.0001f,
+                (msl - minMsl) * 0.0001f,
                 lat - centerLat
             );
             // Reconstruct wind vector from normalized values and min/max if needed
@@ -123,11 +125,11 @@ public class WindVectorMeshLoader : MonoBehaviour
             foreach (int t in arrowTris)
                 triangles.Add(vertOffset + t);
             uvs.AddRange(arrowUV);
-            float ghNorm = (gh - minGh) / (maxGh - minGh);
+            float mslNorm = (msl - minMsl) / (maxMsl - minMsl);
             for (int j = 0; j < verts.Length; j++)
                 uv2s.Add(new Vector2(magNorm, 0));
             for (int j = 0; j < verts.Length; j++)
-                uv3s.Add(new Vector2(ghNorm, 0));
+                uv3s.Add(new Vector2(mslNorm, 0));
 
             if (i % 2000 == 0)
                 yield return null;

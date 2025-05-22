@@ -127,7 +127,9 @@ for level in valid_levels:
             img_array[lat_idx, lon_idx, 0] = int(np.clip(u_norm[idx] * 255, 0, 255))
             img_array[lat_idx, lon_idx, 1] = int(np.clip(v_norm[idx] * 255, 0, 255))
             img_array[lat_idx, lon_idx, 2] = int(np.clip(w_norm[idx] * 255, 0, 255))
-            img_array[lat_idx, lon_idx, 3] = int(np.clip(gh_norm[idx] * 255, 0, 255))
+            # Encode gh_norm in [1, 254]
+            alpha = int(1 + gh_norm[idx] * 253)
+            img_array[lat_idx, lon_idx, 3] = np.clip(alpha, 1, 254)
     # Save image
     img = Image.fromarray(img_array, mode='RGBA')
     img_path = os.path.join(OUTPUT_FOLDER, f"fort_worth_level{level}_img.png")

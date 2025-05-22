@@ -1,0 +1,54 @@
+Variables in /home/mko0/tru4dviz/NC_swaps/../NCdata/openfoam_usa-tx-elizabethtown_2023-02-14T15-00-00.nc:
+x_from_origin_low: shape=(231, 211), dtype=float32, dimensions=('latitude_low', 'longitude_low')
+y_from_origin_low: shape=(231, 211), dtype=float32, dimensions=('latitude_low', 'longitude_low')
+x_from_origin_mid: shape=(47, 43), dtype=float32, dimensions=('latitude_mid', 'longitude_mid')
+y_from_origin_mid: shape=(47, 43), dtype=float32, dimensions=('latitude_mid', 'longitude_mid')
+x_from_origin_high: shape=(24, 22), dtype=float32, dimensions=('latitude_high', 'longitude_high')
+y_from_origin_high: shape=(24, 22), dtype=float32, dimensions=('latitude_high', 'longitude_high')
+altitude_low: shape=(15,), dtype=float32, dimensions=('altitude_low',)
+latitude_low: shape=(231,), dtype=float32, dimensions=('latitude_low',)
+longitude_low: shape=(211,), dtype=float32, dimensions=('longitude_low',)
+altitude_mid: shape=(3,), dtype=float32, dimensions=('altitude_mid',)
+latitude_mid: shape=(47,), dtype=float32, dimensions=('latitude_mid',)
+longitude_mid: shape=(43,), dtype=float32, dimensions=('longitude_mid',)
+altitude_high: shape=(4,), dtype=float32, dimensions=('altitude_high',)
+latitude_high: shape=(24,), dtype=float32, dimensions=('latitude_high',)
+longitude_high: shape=(22,), dtype=float32, dimensions=('longitude_high',)
+u_low: shape=(15, 231, 211), dtype=float32, dimensions=('altitude_low', 'latitude_low', 'longitude_low')
+v_low: shape=(15, 231, 211), dtype=float32, dimensions=('altitude_low', 'latitude_low', 'longitude_low')
+w_low: shape=(15, 231, 211), dtype=float32, dimensions=('altitude_low', 'latitude_low', 'longitude_low')
+tke_low: shape=(15, 231, 211), dtype=float32, dimensions=('altitude_low', 'latitude_low', 'longitude_low')
+u_mid: shape=(3, 47, 43), dtype=float32, dimensions=('altitude_mid', 'latitude_mid', 'longitude_mid')
+v_mid: shape=(3, 47, 43), dtype=float32, dimensions=('altitude_mid', 'latitude_mid', 'longitude_mid')
+w_mid: shape=(3, 47, 43), dtype=float32, dimensions=('altitude_mid', 'latitude_mid', 'longitude_mid')
+tke_mid: shape=(3, 47, 43), dtype=float32, dimensions=('altitude_mid', 'latitude_mid', 'longitude_mid')
+u_high: shape=(4, 24, 22), dtype=float32, dimensions=('altitude_high', 'latitude_high', 'longitude_high')
+v_high: shape=(4, 24, 22), dtype=float32, dimensions=('altitude_high', 'latitude_high', 'longitude_high')
+w_high: shape=(4, 24, 22), dtype=float32, dimensions=('altitude_high', 'latitude_high', 'longitude_high')
+tke_high: shape=(4, 24, 22), dtype=float32, dimensions=('altitude_high', 'latitude_high', 'longitude_high')
+
+Global attributes:
+location: usa-tx-elizabethtown
+spacing_low_mid_high_m: [ 10  50 100]
+creation_time: 07:32 (UTC) on Mar 7, 2025
+origin for x,y meters: [ 33.0265 -97.2725]
+north latitude: 33.03678894042969
+south latitude: 33.01599884033203
+east longitude: -97.2613525390625
+west longitude: -97.28399658203125
+mesh_layers: ['low', 'mid', 'high']
+lowest level MSL: 180.0
+highest level MSL: 870.0
+total points: 739290
+workflow_id: workflow_4Feb2025
+zero_time: 2023-02-14T15-00-00
+plant_canopy_modeling: true
+calculate_height_variant_LAD: true
+drag_coefficient: 0.2
+max_LAD: 0.3
+min_LAD: 0.2
+openfoam_version: OpenFOAM-v2312
+openfoam_sha: e3d132f
+openfoam_compiler_version: OpenFOAM compiler version could not be identified
+openfoam_mpi_version: Intel(R) MPI Library for Linux* OS, Version 2021.10 Build 20230619 (id: c2e19c2f3e)
+openfoam_compilation_options: linux64Gcc85DPInt32Opt

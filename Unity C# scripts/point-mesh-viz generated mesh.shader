@@ -103,6 +103,8 @@ Shader "Unlit/point-mesh-viz generated"
             float x;
       
 
+            float altNorm = i.uv3.x;
+
             if (h > 0.0 && h <= 0.2)
             {
                 x = (h - 0.0) * 5;
@@ -130,7 +132,7 @@ Shader "Unlit/point-mesh-viz generated"
             }
 
            
-            if (!(i.uv3.x < _MaxAltutude && i.uv3.x > _MinAltutude))
+            if (!(altNorm < _MaxAltutude && altNorm > _MinAltutude))
                 col.a = 0;  
 
             if (!(i.uv4.x > _xLeft && i.uv4.x < _xRight))
