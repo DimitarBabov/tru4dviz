@@ -33,4 +33,4 @@ instance/
 *.grib2
 
 HRRRdata/
-HRRRImages/
+HRRRImages/NC_swaps/low_layers_grid.csv
