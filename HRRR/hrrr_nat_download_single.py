@@ -6,7 +6,7 @@ import requests
 
 # --- User input section ---
 # Set the cycle datetime and forecast hour here
-cycle_datetime_str = "2023-02-14T13:00:00"  # ISO format
+cycle_datetime_str = "2023-02-14T15:00:00"  # ISO format
 forecast_hour = 2  # e.g., 2 for f02
 
 # Parse the datetime

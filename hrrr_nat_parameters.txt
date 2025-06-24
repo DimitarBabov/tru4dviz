@@ -1,4 +1,4 @@
-HRRR Native Grid Parameters from file: HRRRdata_nat/hrrr.t14z.wrfnatf02.grib2
+HRRR Native Grid Parameters from file: HRRRdata_nat/hrrr.t15z.wrfnatf02.grib2
 
 
 ### Grid Information ###
@@ -1235,42 +1235,3 @@ Level types and parameter counts:
 - sigmaLayer: 1 parameters
 - surface: 44 parameters
 - unknown: 1 parameters
-
-# HRRR Native Grid Parameters for Vertical Velocity Conversion
-
-# Required Parameters:
-1. Vertical velocity (omega) in Pa/s
-   - Parameter name: "Vertical velocity"
-   - Short name: "w"
-   - Units: Pa/s
-
-2. Temperature in Kelvin
-   - Parameter name: "Temperature"
-   - Short name: "t"
-   - Units: K
-
-3. Pressure levels
-   - Parameter name: "Pressure"
-   - Short name: "pres"
-   - Units: Pa (convert from mb by multiplying by 100)
-
-# Additional Useful Parameters:
-4. Geopotential height
-   - Parameter name: "Geopotential height"
-   - Short name: "gh"
-   - Units: gpm
-
-5. Relative humidity
-   - Parameter name: "Relative humidity"
-   - Short name: "r"
-   - Units: %
-
-# Conversion Formula:
-# w = -(omega * R_d * T) / (p * g)
-# where:
-# - w = geometric vertical velocity (m/s)
-# - omega = pressure vertical velocity (Pa/s)
-# - R_d = gas constant for dry air (287.05 J/kg·K)
-# - T = temperature (K)
-# - p = pressure (Pa)
-# - g = gravitational acceleration (9.81 m/s²)

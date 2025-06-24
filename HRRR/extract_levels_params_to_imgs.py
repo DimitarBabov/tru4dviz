@@ -7,7 +7,7 @@ import json
 
 # File paths
 DATA_FOLDER = "HRRRdata_nat"
-GRIB_FILE = "hrrr.t14z.wrfnatf02.grib2"
+GRIB_FILE = "hrrr.t15z.wrfnatf02.grib2"
 GRIB_PATH = os.path.join(DATA_FOLDER, GRIB_FILE)
 
 # Parameters of interest

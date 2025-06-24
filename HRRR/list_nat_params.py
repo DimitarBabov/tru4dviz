@@ -4,7 +4,7 @@ import numpy as np
 
 # Define the path to the GRIB2 file
 data_folder = "HRRRdata_nat"  # Folder where the native GRIB2 files are stored
-grib_file_name = "hrrr.t14z.wrfnatf02.grib2"  # Replace with your native GRIB2 file name
+grib_file_name = "hrrr.t15z.wrfnatf02.grib2"  # Replace with your native GRIB2 file name
 grib_file_path = os.path.join(data_folder, grib_file_name)
 
 # Define output file path
