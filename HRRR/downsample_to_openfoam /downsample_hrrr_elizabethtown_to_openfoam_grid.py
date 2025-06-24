@@ -201,12 +201,38 @@ def trilinear_interp(lats, lons, gh, field, lat_pt, lon_pt, gh_pt):
         cube[1,1,1]*wx*wy*wz
     )
 
+def latlon_to_xy(lat_2d, lon_2d, group=None):
+    # Use exact origin coordinates from OpenFOAM file
+    lat_origin = 33.0265  # From OpenFOAM global attributes
+    lon_origin = -97.2725  # From OpenFOAM global attributes
+    
+    lat_to_m = 111320.0
+    lon_to_m = 111320.0
+    x_from_origin = (lon_2d - lon_origin) * lon_to_m
+    y_from_origin = (lat_2d - lat_origin) * lat_to_m
+
+    # Rescale to match OpenFOAM min/max for each group
+    openfoam_minmax = {
+        'low':  {'x': (-1074.5179, 1041.6265), 'y': (-1164.5007, 1141.0878)},
+        'mid':  {'x': (-1074.5179, 1041.6265), 'y': (-1164.5007, 1141.0878)},
+        'high': {'x': (-1074.5179, 1041.6265), 'y': (-1164.5007, 1141.0878)},
+    }
+    if group in openfoam_minmax:
+        x_min_of, x_max_of = openfoam_minmax[group]['x']
+        y_min_of, y_max_of = openfoam_minmax[group]['y']
+        x_min, x_max = x_from_origin.min(), x_from_origin.max()
+        y_min, y_max = y_from_origin.min(), y_from_origin.max()
+        x_from_origin = (x_from_origin - x_min) / (x_max - x_min) * (x_max_of - x_min_of) + x_min_of
+        y_from_origin = (y_from_origin - y_min) / (y_max - y_min) * (y_max_of - y_min_of) + y_min_of
+    return x_from_origin, y_from_origin
+
 # Prepare output data
 output = {}
+xy_from_origin = {}
 for group, params in GROUPS.items():
     lat_grid = np.linspace(LAT_MIN, LAT_MAX, params['lat'])
     lon_grid = np.linspace(LON_MIN, LON_MAX, params['lon'])
-    alt_grid = ALTITUDES[group]  # These are the OpenFOAM altitudes for this group (length = OpenFOAM nlev)
+    alt_grid = ALTITUDES[group]
     output[group] = {
         'lat': lat_grid,
         'lon': lon_grid,
@@ -215,6 +241,9 @@ for group, params in GROUPS.items():
         'v': np.full((len(alt_grid), len(lat_grid), len(lon_grid)), np.nan),
         'w': np.full((len(alt_grid), len(lat_grid), len(lon_grid)), np.nan),
     }
+    lon_2d, lat_2d = np.meshgrid(lon_grid, lat_grid)
+    x_from_origin, y_from_origin = latlon_to_xy(lat_2d, lon_2d, group=group)
+    xy_from_origin[group] = (x_from_origin, y_from_origin)
     for k, gh_pt in enumerate(alt_grid):
         for i, lat_pt in enumerate(lat_grid):
             for j, lon_pt in enumerate(lon_grid):
@@ -232,9 +261,15 @@ for group, params in GROUPS.items():
     data_vars[f'u_{group}'] = (['altitude_' + group, 'latitude_' + group, 'longitude_' + group], output[group]['u'])
     data_vars[f'v_{group}'] = (['altitude_' + group, 'latitude_' + group, 'longitude_' + group], output[group]['v'])
     data_vars[f'w_{group}'] = (['altitude_' + group, 'latitude_' + group, 'longitude_' + group], output[group]['w'])
+    x_from_origin, y_from_origin = xy_from_origin[group]
+    data_vars[f'x_from_origin_{group}'] = (['latitude_' + group, 'longitude_' + group], x_from_origin)
+    data_vars[f'y_from_origin_{group}'] = (['latitude_' + group, 'longitude_' + group], y_from_origin)
 
 # Build dataset
 xr_ds = xr.Dataset(data_vars, coords=coords)
+
+# Add OpenFOAM's exact origin coordinates as global attribute
+xr_ds.attrs['origin for x,y meters'] = [33.0265, -97.2725]  # Exact values from OpenFOAM
 
 # Add units and attributes
 for group in GROUPS:
@@ -243,6 +278,11 @@ for group in GROUPS:
     xr_ds[f'latitude_{group}'].attrs['units'] = 'degrees_north'
     xr_ds[f'longitude_{group}'].attrs['units'] = 'degrees_east'
     xr_ds[f'altitude_{group}'].attrs['units'] = 'm'
+    xr_ds[f'x_from_origin_{group}'].attrs['units'] = 'm'
+    xr_ds[f'y_from_origin_{group}'].attrs['units'] = 'm'
+    xr_ds[f'x_from_origin_{group}'].attrs['long_name'] = 'Cartesian x-axis distance from origin to grid point center'
+    xr_ds[f'y_from_origin_{group}'].attrs['long_name'] = 'Cartesian y-axis distance from origin to grid point center'
+
 xr_ds.attrs['title'] = 'HRRR wind field data regridded to Elizabethtown, TX domain (OpenFOAM grid)'
 xr_ds.attrs['source'] = 'HRRR .npz data interpolated to OpenFOAM grid'
 
