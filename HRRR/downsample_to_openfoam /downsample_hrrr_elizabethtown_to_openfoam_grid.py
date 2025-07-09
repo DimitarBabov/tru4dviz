@@ -51,25 +51,25 @@ if rand_gh < np.min(gh_profile) or rand_gh > np.max(gh_profile):
     print(f"Warning: rand_gh={rand_gh:.4f} is outside the range of gh_profile [{np.min(gh_profile):.4f}, {np.max(gh_profile):.4f}]. Returning np.nan for all interpolated values.")
     u_interp = v_interp = w_interp = pres_interp = t_interp = np.nan
 else:
-    # Gather the 8 corners
-    corners = []
-    for kk in [k0, k1]:
-        for ii in [i0, i1]:
-            for jj in [j0, j1]:
-                corners.append({
-                    'lat': lats[ii, jj],
-                    'lon': lons[ii, jj],
-                    'gh': gh[kk, ii, jj],
-                    'u': u[kk, ii, jj],
-                    'v': v[kk, ii, jj],
-                    'w': w[kk, ii, jj],
-                    'pres': pres[kk, ii, jj],
-                    't': t[kk, ii, jj],
-                    'k': kk, 'i': ii, 'j': jj
-                })
-    print("8 corner points (k,i,j): lat, lon, gh, u, v, w, pres, t:")
-    for c in corners:
-        print(f"({c['k']},{c['i']},{c['j']}): {c['lat']:.4f}, {c['lon']:.4f}, {c['gh']:.4f}, {c['u']:.4f}, {c['v']:.4f}, {c['w']:.4f}, {c['pres']:.2f}, {c['t']:.2f}")
+# Gather the 8 corners
+corners = []
+for kk in [k0, k1]:
+    for ii in [i0, i1]:
+        for jj in [j0, j1]:
+            corners.append({
+                'lat': lats[ii, jj],
+                'lon': lons[ii, jj],
+                'gh': gh[kk, ii, jj],
+                'u': u[kk, ii, jj],
+                'v': v[kk, ii, jj],
+                'w': w[kk, ii, jj],
+                'pres': pres[kk, ii, jj],
+                't': t[kk, ii, jj],
+                'k': kk, 'i': ii, 'j': jj
+            })
+print("8 corner points (k,i,j): lat, lon, gh, u, v, w, pres, t:")
+for c in corners:
+    print(f"({c['k']},{c['i']},{c['j']}): {c['lat']:.4f}, {c['lon']:.4f}, {c['gh']:.4f}, {c['u']:.4f}, {c['v']:.4f}, {c['w']:.4f}, {c['pres']:.2f}, {c['t']:.2f}")
 
 # Trilinear interpolation
 gh0 = gh[k0, i0, j0]
