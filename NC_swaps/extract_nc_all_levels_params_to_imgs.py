@@ -11,13 +11,18 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 NC_FILES = [
     {
         'name': 'openfoam',
-        'output_prefix': 'cdf',
+        'output_prefix': 'cfd',
         'path': os.path.join(SCRIPT_DIR, '../NCdata/openfoam_usa-tx-elizabethtown_2023-02-14T15-00-00.nc')
     },
     {
         'name': 'hrrr', 
-        'output_prefix': 'hrr',
+        'output_prefix': 'hrrr',
         'path': os.path.join(SCRIPT_DIR, '../NCdata/hrrr-regrid_usa-tx-elizabethtown_2023-02-14T15-00-00_f0hr0min.nc')
+    },
+    {
+        'name': 'difference',
+        'output_prefix': 'diff-cfd-hrrr',
+        'path': os.path.join(SCRIPT_DIR, '../NCdata/diff_cfd_usa-tx-elizabethtown_2023-02-14T15-00-00.nc')
     }
 ]
 
@@ -75,6 +80,7 @@ def process_nc_file(file_config):
             OUTPUT_FOLDER = os.path.join(SCRIPT_DIR, f'{group}_levels_img_encoded_{output_prefix}')
             os.makedirs(OUTPUT_FOLDER, exist_ok=True)
             
+            # Get all variables inside the with block
             lat = ds.variables[lat_name][:]
             lon = ds.variables[lon_name][:]
             u = ds.variables[u_name][:]
@@ -197,7 +203,7 @@ def process_nc_file(file_config):
                 meta_path = os.path.join(OUTPUT_FOLDER, f"{group}_level{k}_meta.json")
                 with open(meta_path, 'w') as f:
                     json.dump(meta, f, indent=2)
-                    print(f"    Saved metadata: {meta_path}")
+                print(f"    Saved metadata: {meta_path}")
 
 # Process both files
 for file_config in NC_FILES:
@@ -206,9 +212,12 @@ for file_config in NC_FILES:
 print("\n=== Processing Complete ===")
 print("Both OpenFOAM and HRRR data have been processed and encoded to images.")
 print("Output folders:")
-print("  - low_levels_img_encoded_cdf/")
-print("  - mid_levels_img_encoded_cdf/")
-print("  - high_levels_img_encoded_cdf/")
-print("  - low_levels_img_encoded_hrr/")
-print("  - mid_levels_img_encoded_hrr/")
-print("  - high_levels_img_encoded_hrr/") 
+print("  - low_levels_img_encoded_cfd/")
+print("  - mid_levels_img_encoded_cfd/")
+print("  - high_levels_img_encoded_cfd/")
+print("  - low_levels_img_encoded_hrrr/")
+print("  - mid_levels_img_encoded_hrrr/")
+print("  - high_levels_img_encoded_hrrr/")
+print("  - low_levels_img_encoded_diff-cfd-hrrr/")
+print("  - mid_levels_img_encoded_diff-cfd-hrrr/")
+print("  - high_levels_img_encoded_diff-cfd-hrrr/") 

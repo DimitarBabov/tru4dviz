@@ -71,47 +71,47 @@ else:
     for c in corners:
         print(f"({c['k']},{c['i']},{c['j']}): {c['lat']:.4f}, {c['lon']:.4f}, {c['gh']:.4f}, {c['u']:.4f}, {c['v']:.4f}, {c['w']:.4f}, {c['pres']:.2f}, {c['t']:.2f}")
 
-    # Trilinear interpolation
-    gh0 = gh[k0, i0, j0]
-    gh1 = gh[k1, i0, j0]
-    lat0 = lats[i0, j0]
-    lat1 = lats[i1, j0]
-    lon0 = lons[i0, j0]
-    lon1 = lons[i0, j1]
-    def interp_weight(x, x0, x1):
-        if x1 == x0:
-            return 0.0
-        return (x - x0) / (x1 - x0)
-    wx = interp_weight(rand_lon, lon0, lon1)
-    wy = interp_weight(rand_lat, lat0, lat1)
-    wz = interp_weight(rand_gh, gh0, gh1)
-    def trilinear(arr):
-        return (
-            arr[0,0,0]*(1-wx)*(1-wy)*(1-wz) +
-            arr[0,0,1]*wx*(1-wy)*(1-wz) +
-            arr[0,1,0]*(1-wx)*wy*(1-wz) +
-            arr[0,1,1]*wx*wy*(1-wz) +
-            arr[1,0,0]*(1-wx)*(1-wy)*wz +
-            arr[1,0,1]*wx*(1-wy)*wz +
-            arr[1,1,0]*(1-wx)*wy*wz +
-            arr[1,1,1]*wx*wy*wz
-        )
-    def get_cube(field_stack):
-        return np.array([
-            [
-                [field_stack[k0, i0, j0], field_stack[k0, i0, j1]],
-                [field_stack[k0, i1, j0], field_stack[k0, i1, j1]]
-            ],
-            [
-                [field_stack[k1, i0, j0], field_stack[k1, i0, j1]],
-                [field_stack[k1, i1, j0], field_stack[k1, i1, j1]]
-            ]
-        ])
-    u_interp = trilinear(get_cube(u))
-    v_interp = trilinear(get_cube(v))
-    w_interp = trilinear(get_cube(w))
-    pres_interp = trilinear(get_cube(pres))
-    t_interp = trilinear(get_cube(t))
+# Trilinear interpolation
+gh0 = gh[k0, i0, j0]
+gh1 = gh[k1, i0, j0]
+lat0 = lats[i0, j0]
+lat1 = lats[i1, j0]
+lon0 = lons[i0, j0]
+lon1 = lons[i0, j1]
+def interp_weight(x, x0, x1):
+    if x1 == x0:
+        return 0.0
+    return (x - x0) / (x1 - x0)
+wx = interp_weight(rand_lon, lon0, lon1)
+wy = interp_weight(rand_lat, lat0, lat1)
+wz = interp_weight(rand_gh, gh0, gh1)
+def trilinear(arr):
+    return (
+        arr[0,0,0]*(1-wx)*(1-wy)*(1-wz) +
+        arr[0,0,1]*wx*(1-wy)*(1-wz) +
+        arr[0,1,0]*(1-wx)*wy*(1-wz) +
+        arr[0,1,1]*wx*wy*(1-wz) +
+        arr[1,0,0]*(1-wx)*(1-wy)*wz +
+        arr[1,0,1]*wx*(1-wy)*wz +
+        arr[1,1,0]*(1-wx)*wy*wz +
+        arr[1,1,1]*wx*wy*wz
+    )
+def get_cube(field_stack):
+    return np.array([
+        [
+            [field_stack[k0, i0, j0], field_stack[k0, i0, j1]],
+            [field_stack[k0, i1, j0], field_stack[k0, i1, j1]]
+        ],
+        [
+            [field_stack[k1, i0, j0], field_stack[k1, i0, j1]],
+            [field_stack[k1, i1, j0], field_stack[k1, i1, j1]]
+        ]
+    ])
+u_interp = trilinear(get_cube(u))
+v_interp = trilinear(get_cube(v))
+w_interp = trilinear(get_cube(w))
+pres_interp = trilinear(get_cube(pres))
+t_interp = trilinear(get_cube(t))
 
 print(f"\nTrilinear interpolated values at random point:")
 print(f"u = {u_interp}, v = {v_interp}, w = {w_interp}, pres = {pres_interp}, t = {t_interp}")
